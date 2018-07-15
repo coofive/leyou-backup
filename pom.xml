@@ -10,6 +10,7 @@
 
     <name>leyou</name>
     <description>Demo project for Spring Boot</description>
+    <packaging>pom</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -101,4 +102,9 @@
         </repository>
     </repositories>
 
+    <modules>
+        <module>ly-registry</module>
+        <module>ly-api-gateway</module>
+        <module>ly-item</module>
+    </modules>
 </project>
