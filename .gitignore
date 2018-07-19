@@ -2,9 +2,28 @@
 ### Example user template template
 ### Example user template
 
+# IntelliJ-java忽略文件列表
 # IntelliJ project files
 .idea
 *.iml
+*.classpath
+*.project
+.settings
+.project
+.target
+.classpath
+
+.DS_Store
 out
 gen
-target
+**/target/
+target/
+
+
+
+# Node忽略文件列表
+# Created by https://www.gitignore.io/api/node
+**/node_modules/
+*.npm
+.cache
+**/dist/
