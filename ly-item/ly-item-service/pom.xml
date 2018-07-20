@@ -11,6 +11,7 @@
 
     <groupId>com.leyou.service</groupId>
     <artifactId>ly-item-service</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!--Eureka客户端-->
