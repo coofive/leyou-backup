@@ -55,7 +55,7 @@ public class Category {
 	}
 
 	public void setIsParent(Boolean isParent) {
-		isParent = isParent;
+		this.isParent = isParent;
 	}
 
 	public Integer getSort() {
