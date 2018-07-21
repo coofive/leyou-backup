@@ -5,7 +5,7 @@
       <!--搜索框，与search属性关联-->
       <v-spacer/>
       <v-flex xs3>
-      <v-text-field label="输入关键字搜索" v-model.lazy="search" append-icon="search" hide-details/>
+        <v-text-field label="输入关键字搜索" v-model.lazy="search" append-icon="search" hide-details/>
       </v-flex>
     </v-card-title>
     <v-divider/>
