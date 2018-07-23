@@ -34,4 +34,12 @@ public interface BrandService {
      * @param ids
      */
     void addBrand(Brand brand, List<Long> ids);
+
+    /**
+     * 通过cid查询品牌
+     *
+     * @param cid
+     * @return
+     */
+    List<Brand> queryBrandByCid(Long cid);
 }

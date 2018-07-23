@@ -27,6 +27,15 @@
 <script>
   export default {
     name: "new-brand-form",
+    props: {
+      oldBrand: {
+        type: Object
+      },
+      isEdit: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         valid: false, // 表单校验结果标记
@@ -80,6 +89,9 @@
     },
     created() {
       console.log(this.$qs);
+    },
+    watch: {
+      // TODO 监控oldBrand变化
     }
   }
 </script>
