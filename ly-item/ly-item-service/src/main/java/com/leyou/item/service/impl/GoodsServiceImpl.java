@@ -123,6 +123,110 @@ public class GoodsServiceImpl implements GoodsService {
         }
         // 保存skus数据
         // 需要设置skus里面的spuId
+        saveSkusAndStocks(spu);
+
+        return true;
+    }
+
+
+    /**
+     * 通过商品抽象id查询抽象具体信息
+     *
+     * @param spuId
+     * @return
+     */
+    @Override
+    public SpuDetail querySpuDetailBySpuId(Long spuId) {
+        return spuDetailMapper.selectByPrimaryKey(spuId);
+    }
+
+    /**
+     * 通过商品抽象id查询具体商品信息
+     *
+     * @param spuId
+     * @return
+     */
+    @Override
+    public List<Sku> querySkuListBySpuId(Long spuId) {
+        Sku sku1 = new Sku();
+        sku1.setSpuId(spuId);
+        List<Sku> skuList = skuMapper.select(sku1);
+        skuList.forEach(sku -> {
+            Integer stock = stockMapper.selectByPrimaryKey(sku.getId()).getStock();
+            sku.setStock(stock);
+        });
+        return skuList;
+    }
+
+    /**
+     * 修改商品数据
+     *
+     * @param spu
+     * @return
+     */
+    @Override
+    @Transactional
+    public Boolean updateGoods(Spu spu) {
+        // 修改spu的一些属性
+        spu.setLastUpdateTime(new Date());
+        // 保存修改spu数据
+        int count = spuMapper.updateByPrimaryKeySelective(spu);
+        if (count == 0) {
+            logger.error("修改spu数据失败", spu);
+            throw new RuntimeException("修改spu数据失败");
+        }
+
+        // 保存修改spuDetail数据,自带spuId
+        SpuDetail spuDetail = spu.getSpuDetail();
+        count = spuDetailMapper.updateByPrimaryKeySelective(spuDetail);
+        if (count == 0) {
+            logger.error("修改spuDetail数据失败", spuDetail);
+            throw new RuntimeException("修改spuDetail数据失败");
+        }
+
+
+        // 保存修改skus数据
+        // 需要先删除，因为不清楚是否又新增了sku具体商品,先查询所有sku的id
+        Example example = new Example(Sku.class);
+        example.createCriteria().andEqualTo("spuId", spu.getId());
+        List<Sku> skuList = skuMapper.selectByExample(example);
+        List<Long> skuIds = skuList.stream().map(Sku::getId).collect(Collectors.toList());
+        skuMapper.deleteByIdList(skuIds);
+        stockMapper.deleteByIdList(skuIds);
+
+        // 再添加skus数据以及stock数据
+        saveSkusAndStocks(spu);
+
+        return true;
+    }
+
+
+    /**
+     * 处理商品分类和品牌查询
+     *
+     * @param spuList
+     */
+    private void handleCategoryNameAndBrandName(List<Spu> spuList) {
+        spuList.forEach((spu) -> {
+            // 查询Category,将3个cname用/顺序拼接
+            List<Long> cidList = Arrays.asList(spu.getCid1(), spu.getCid2(), spu.getCid3());
+            List<Category> categories = categoryMapper.selectByIdList(cidList);
+            String cname = categories.stream().map(Category::getName).collect(Collectors.joining("/"));
+            spu.setCname(cname);
+
+            // 查询brand，将只需要name
+            Brand brand = brandMapper.selectByPrimaryKey(spu.getBrandId());
+            spu.setBname(brand.getName());
+        });
+    }
+
+
+    /**
+     * 添加具体的商品信息和库存
+     *
+     * @param spu
+     */
+    private void saveSkusAndStocks(Spu spu) {
         spu.getSkus().forEach(sku -> {
             sku.setCreateTime(spu.getCreateTime());
             sku.setLastUpdateTime(spu.getLastUpdateTime());
@@ -145,26 +249,6 @@ public class GoodsServiceImpl implements GoodsService {
                 throw new RuntimeException("保存Sku数据失败");
             }
 
-        });
-        return true;
-    }
-
-    /**
-     * 处理商品分类和品牌查询
-     *
-     * @param spuList
-     */
-    private void handleCategoryNameAndBrandName(List<Spu> spuList) {
-        spuList.forEach((spu) -> {
-            // 查询Category,将3个cname用/顺序拼接
-            List<Long> cidList = Arrays.asList(spu.getCid1(), spu.getCid2(), spu.getCid3());
-            List<Category> categories = categoryMapper.selectByIdList(cidList);
-            String cname = categories.stream().map(Category::getName).collect(Collectors.joining("/"));
-            spu.setCname(cname);
-
-            // 查询brand，将只需要name
-            Brand brand = brandMapper.selectByPrimaryKey(spu.getBrandId());
-            spu.setBname(brand.getName());
         });
     }
 }

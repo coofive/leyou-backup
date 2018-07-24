@@ -1,7 +1,11 @@
 package com.leyou.item.service;
 
 import com.leyou.common.pojo.PageResult;
+import com.leyou.item.pojo.Sku;
 import com.leyou.item.pojo.Spu;
+import com.leyou.item.pojo.SpuDetail;
+
+import java.util.List;
 
 /**
  * 商品处理业务接口
@@ -30,4 +34,28 @@ public interface GoodsService {
      * @return
      */
     Boolean saveGoods(Spu spu);
+
+    /**
+     * 通过商品抽象id查询抽象具体信息
+     *
+     * @param spuId
+     * @return
+     */
+    SpuDetail querySpuDetailBySpuId(Long spuId);
+
+    /**
+     * 通过商品抽象id查询具体商品信息
+     *
+     * @param spuId
+     * @return
+     */
+    List<Sku> querySkuListBySpuId(Long spuId);
+
+    /**
+     * 修改商品数据
+     *
+     * @param spu
+     * @return
+     */
+    Boolean updateGoods(Spu spu);
 }

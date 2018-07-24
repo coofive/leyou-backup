@@ -66,11 +66,64 @@ public class GoodsController {
             Boolean result = this.goodsService.saveGoods(spu);
             if (result) {
                 return new ResponseEntity<>(HttpStatus.CREATED);
-            }else {
+            } else {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
         }
         //this.goodsService.
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 修改商品
+     *
+     * @param spu
+     * @return
+     */
+    @PutMapping("goods")
+    public ResponseEntity<Void> updateGoods(@RequestBody Spu spu) {
+        // 做数据的校验
+        if (!StringUtils.isEmpty(spu)) {
+            Boolean result = this.goodsService.updateGoods(spu);
+            if (result) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        }
+        //this.goodsService.
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * 通过商品抽象id查询抽象具体信息
+     *
+     * @param spuId
+     * @return
+     */
+    @GetMapping("/spu/detail/{spuId}")
+    public ResponseEntity<SpuDetail> querySpuDetailBySpuId(@PathVariable("spuId") Long spuId) {
+        SpuDetail spuDetail = this.goodsService.querySpuDetailBySpuId(spuId);
+        if (spuDetail == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(spuDetail);
+    }
+
+    /**
+     * 通过商品抽象id查询具体商品信息
+     *
+     * @param spuId
+     * @return
+     */
+    @GetMapping("/sku/list")
+    public ResponseEntity<List<Sku>> querySkuListBySpuId(@RequestParam("id") Long spuId) {
+        List<Sku> skuList = this.goodsService.querySkuListBySpuId(spuId);
+        if (CollectionUtils.isEmpty(skuList)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(skuList);
     }
 }

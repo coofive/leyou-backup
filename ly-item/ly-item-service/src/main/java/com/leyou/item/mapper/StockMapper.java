@@ -1,6 +1,7 @@
 package com.leyou.item.mapper;
 
 import com.leyou.item.pojo.Stock;
+import tk.mybatis.mapper.additional.idlist.DeleteByIdListMapper;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -11,5 +12,5 @@ import tk.mybatis.mapper.common.Mapper;
  * @Version: 1.0
  * <p>Copyright: Copyright (c) 2018</p>
  */
-public interface StockMapper extends Mapper<Stock> {
+public interface StockMapper extends Mapper<Stock>, DeleteByIdListMapper<Stock, Long> {
 }
