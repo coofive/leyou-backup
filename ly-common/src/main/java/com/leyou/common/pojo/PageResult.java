@@ -24,6 +24,9 @@ public class PageResult<T> {
      */
     private List<T> items;
 
+    public PageResult() {
+    }
+
     public PageResult(Long total, List<T> items) {
         this.total = total;
         this.items = items;
@@ -57,5 +60,14 @@ public class PageResult<T> {
 
     public void setItems(List<T> items) {
         this.items = items;
+    }
+
+    @Override
+    public String toString() {
+        return "PageResult{" +
+                "total=" + total + "\n" +
+                ", totalPage=" + totalPage + "\n" +
+                ", items=" + items + "\n" +
+                '}';
     }
 }

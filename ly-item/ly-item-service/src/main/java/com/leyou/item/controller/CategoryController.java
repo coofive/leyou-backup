@@ -30,7 +30,7 @@ public class CategoryController {
     /**
      * 根据父节点查询商品类目
      *
-     * @param parentId
+     * @param parentId 商品表父节点id
      * @author cooFive
      * @date 2018/7/20 23:37
      */
@@ -42,4 +42,22 @@ public class CategoryController {
         }
         return ResponseEntity.ok(categories);
     }
+
+
+    /**
+     * 根据ids查询商品类目
+     *
+     * @param ids 分类id
+     * @return
+     */
+    @GetMapping("list/ids")
+    public ResponseEntity<List<Category>> queryByCids(@RequestParam(value = "ids", defaultValue = "0") List<Long> ids) {
+        List<Category> categories = categoryService.queryByCids(ids);
+        if (categories == null || categories.size() < 1) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(categories);
+    }
+
+
 }

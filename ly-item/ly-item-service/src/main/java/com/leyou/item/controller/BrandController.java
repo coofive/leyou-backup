@@ -71,11 +71,26 @@ public class BrandController {
      * @return
      */
     @GetMapping("cid/{cid}")
-    public ResponseEntity<List<Brand>> queryBrandByCid(@PathVariable("cid") Long cid) {
+    public ResponseEntity<List<Brand>> queryByCid(@PathVariable("cid") Long cid) {
         List<Brand> brands = this.brandService.queryBrandByCid(cid);
         if (brands == null || CollectionUtils.isEmpty(brands)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(brands);
+    }
+
+    /**
+     * 通过brandId查询品牌
+     *
+     * @param brandId
+     * @return
+     */
+    @GetMapping("brandId")
+    public ResponseEntity<Brand> queryByBrandId(@RequestParam(value = "brandId", defaultValue = "0") Long brandId) {
+        Brand brand = this.brandService.queryByBrandId(brandId);
+        if (brand == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(brand);
     }
 }

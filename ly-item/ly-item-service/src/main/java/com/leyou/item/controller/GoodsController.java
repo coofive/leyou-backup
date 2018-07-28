@@ -126,4 +126,19 @@ public class GoodsController {
 
         return ResponseEntity.ok(skuList);
     }
+
+    /**
+     * 通过spuId查询Spu
+     *
+     * @param spuId 商品id
+     * @return
+     */
+    @GetMapping("/spu/spuId")
+    public ResponseEntity<Spu> querySpuBySpuId(@RequestParam(value = "spuId", defaultValue = "0") Long spuId) {
+        Spu spu = this.goodsService.querySpuBySpuId(spuId);
+        if (spu == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(spu);
+    }
 }

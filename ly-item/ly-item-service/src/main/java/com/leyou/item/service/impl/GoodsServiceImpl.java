@@ -200,6 +200,11 @@ public class GoodsServiceImpl implements GoodsService {
         return true;
     }
 
+    @Override
+    public Spu querySpuBySpuId(Long spuId) {
+        return spuMapper.selectByPrimaryKey(spuId);
+    }
+
 
     /**
      * 处理商品分类和品牌查询

@@ -58,4 +58,12 @@ public interface GoodsService {
      * @return
      */
     Boolean updateGoods(Spu spu);
+
+    /**
+     * 通过spuId查询Spu
+     *
+     * @param spuId 商品id
+     * @return
+     */
+    Spu querySpuBySpuId(Long spuId);
 }

@@ -17,9 +17,17 @@ public interface CategoryService {
     /**
      * 通过parentId查询商品分类
      *
-     * @param parentId
+     * @param parentId 商品表父节点id
+     * @return
      * @author cooFive
-     * @date 18/7/20 16:14
      */
     List<Category> queryByParentId(Long parentId);
+
+    /**
+     * 根据ids查询商品类目
+     *
+     * @param ids
+     * @return
+     */
+    List<Category> queryByCids(List<Long> ids);
 }
