@@ -59,7 +59,8 @@ public class SearchServiceImpl implements SearchService {
         // 4. 查询，获取查询结果
         Page<Goods> goodsPage = this.repository.search(queryBuilder.build());
         long total = goodsPage.getTotalElements();
+        long totalPages = goodsPage.getTotalPages();
 
-        return new PageResult<>(total, goodsPage.getContent());
+        return new PageResult<>(total, totalPages, goodsPage.getContent());
     }
 }
