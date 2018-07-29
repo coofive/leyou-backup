@@ -56,12 +56,14 @@
             margin-right: 10px;
         }
 
-        /*        .logo-list li{
-                    padding:8px;
-                }
-               .logo-list li:hover{
-                    background-color: #f3f3f3;
-                }*/
+        .logo-list li {
+            padding: 8px;
+        }
+
+        .logo-list li:hover {
+            background-color: #f3f3f3;
+        }
+
         .type-list a:hover {
             color: #1299ec;
         }
@@ -124,42 +126,27 @@
             </div>
             <!--selector-->
             <div class="clearfix selector">
-                <div class="type-wrap">
-                    <div class="fl key">分类</div>
+                <div class="type-wrap"
+                     v-for="(f,i) in filters" :key="i" v-if="f.k != 'brandId'">
+                    <div class="fl key">{{f.k == 'cid3'? '分类':f.k}}</div>
                     <div class="fl value">
                         <ul class="type-list">
-                            <li>
-                                <a>手机</a>
-                            </li>
-                            <li>
-                                <a>儿童手表</a>
+                            <li v-for="(option,j) in f.options" :key="j">
+                                <a href="javascript:;">{{option.name}}</a>
                             </li>
                         </ul>
                     </div>
                     <div class="fl ext"></div>
                 </div>
-                <div class="type-wrap logo">
-                    <div class="fl key brand">品牌</div>
+                <div v-else class="type-wrap logo">
+                    <div class="fl key brand">{{f.k == 'brandId'? '品牌':f.k}}</div>
                     <div class="value logos">
                         <ul class="logo-list">
-                            <li><img src="img/_/phone01.png"/></li>
-                            <li><img src="img/_/phone02.png"/></li>
-                            <li><img src="img/_/phone03.png"/></li>
-                            <li><img src="img/_/phone04.png"/></li>
-                            <li><img src="img/_/phone05.png"/></li>
-                            <li><img src="img/_/phone06.png"/></li>
-                            <li><img src="img/_/phone07.png"/></li>
-                            <li><img src="img/_/phone08.png"/></li>
-                            <li><img src="img/_/phone09.png"/></li>
-                            <li><img src="img/_/phone10.png"/></li>
-                            <li><img src="img/_/phone11.png"/></li>
-                            <li><img src="img/_/phone12.png"/></li>
-                            <li><img src="img/_/phone13.png"/></li>
-                            <li><img src="img/_/phone14.png"/></li>
-                            <li><img src="img/_/phone05.png"/></li>
-                            <li><img src="img/_/phone06.png"/></li>
-                            <li><img src="img/_/phone07.png"/></li>
-                            <li style="text-align: center"><a style="line-height: 30px; font-size: 12px" href="#">黑马</a>
+                            <li v-for="(option,y) in f.options" :key="y" v-if="option.image">
+                                <img :src="option.image"/>
+                            </li>
+                            <li style="text-align: center" v-else>
+                                <a style="line-height: 30px; font-size: 12px" href="#">{{option.name}}</a>
                             </li>
                         </ul>
                     </div>
@@ -285,20 +272,26 @@
                 <div class="sui-navbar">
                     <div class="navbar-inner filter">
                         <ul class="sui-nav">
-                            <li class="active">
+                            <li :class="{active: search.sortBy === ''}" @click="search.sortBy=''">
                                 <a href="#">综合</a>
                             </li>
                             <li>
                                 <a href="#">销量</a>
                             </li>
-                            <li>
+                            <li @click="search.sortBy='createTime',search.descending = true"
+                                :class="{active: search.sortBy === 'createTime'}">
                                 <a href="#">新品</a>
                             </li>
                             <li>
                                 <a href="#">评价</a>
                             </li>
-                            <li>
-                                <a href="#">价格</a>
+                            <li :class="{active: search.sortBy === 'price'}"
+                                @click="search.sortBy='price', search.descending = !search.descending">
+                                <a href="#">
+                                    价格
+                                    <v-icon v-show="search.descending">arrow_drop_down</v-icon>
+                                    <v-icon v-show="!search.descending">arrow_drop_up</v-icon>
+                                </a>
                             </li>
                         </ul>
                         <div class="top-pagination">
@@ -473,9 +466,10 @@
                 page: 1,
             },
             goodsList: [],
-            total: 0,
-            totalPage: 0,
-            targetPage: 1,
+            total: 0,   // 总条数
+            totalPage: 0,   // 总页数
+            targetPage: 1,  // 要点击的目标页
+            filters: [], // 过滤参数集合
         },
         created() {
             // 判断是否有请求参数, location.search 返回当前url?(包括?)后面的字符串
@@ -486,6 +480,11 @@
             const search = ly.parse(location.search.substring(1));
             // 对page进行初始化,以防止为空
             search.page = search.page ? parseInt(search.page) : 1;
+
+            // 对排序进行初始化,默认为"",代表不排序
+            search.sortBy = search.sortBy || '';
+            // 对排序进行初始化,转为布尔值
+            search.descending = search.descending === 'true' || false;
 
             // 记录在data的search对象中
             this.search = search;
@@ -523,6 +522,16 @@
                         this.goodsList = data.items;
                         this.total = data.total;
                         this.totalPage = data.totalPage;
+
+                        // 初始化过滤项
+                        this.filters.push({
+                            k: "cid3",
+                            options: data.categories
+                        });
+                        this.filters.push({
+                            k: "brandId",
+                            options: data.brands
+                        });
 
                     }).catch(() => {
                     console.log("请求失败")

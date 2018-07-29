@@ -3,6 +3,7 @@ package com.leyou.item.mapper;
 import com.leyou.item.pojo.Brand;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import tk.mybatis.mapper.additional.idlist.IdListMapper;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  * @Version: 1.0
  * <p>Copyright: Copyright (c) 2018</p>
  */
-public interface BrandMapper extends Mapper<Brand> {
+public interface BrandMapper extends Mapper<Brand>, IdListMapper<Brand, Long> {
 
     /**
      * 通过cid查询brand

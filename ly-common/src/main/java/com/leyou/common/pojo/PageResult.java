@@ -24,6 +24,7 @@ public class PageResult<T> {
      */
     private List<T> items;
 
+
     public PageResult() {
     }
 

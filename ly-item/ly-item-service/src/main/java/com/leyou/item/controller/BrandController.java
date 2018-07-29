@@ -93,4 +93,20 @@ public class BrandController {
         }
         return ResponseEntity.ok(brand);
     }
+
+    /**
+     * 通过brandIds查询品牌
+     *
+     * @param brandIds
+     * @return
+     */
+    @GetMapping("brandIds")
+    public ResponseEntity<List<Brand>> queryByBrandIds(@RequestParam(value = "brandIds")List<Long> brandIds) {
+        List<Brand> brands = this.brandService.queryByBrandIds(brandIds);
+        if (CollectionUtils.isEmpty(brands)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(brands);
+    }
+
 }

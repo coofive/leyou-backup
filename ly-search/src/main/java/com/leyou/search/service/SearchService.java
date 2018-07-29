@@ -1,10 +1,8 @@
 package com.leyou.search.service;
 
-import com.leyou.common.pojo.PageResult;
 import com.leyou.search.pojo.Goods;
 import com.leyou.search.pojo.SearchRequest;
-
-import java.util.List;
+import com.leyou.search.pojo.SearchResult;
 
 /**
  * 搜索商品处理业务接口
@@ -21,5 +19,5 @@ public interface SearchService {
      * @param searchRequest
      * @return
      */
-    PageResult<Goods> queryByPage(SearchRequest searchRequest);
+    SearchResult<Goods> queryByPage(SearchRequest searchRequest);
 }

@@ -28,6 +28,16 @@ public class SearchRequest {
      */
     private Integer page;
 
+    /**
+     * 排序字段
+     */
+    private String sortBy;
+
+    /**
+     * 升序或降序
+     */
+    private boolean descending;
+
     public String getKey() {
         return key;
     }
@@ -50,5 +60,21 @@ public class SearchRequest {
 
     public Integer getSize() {
         return DEFAULT_SIZE;
+    }
+
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public boolean getDescending() {
+        return descending;
+    }
+
+    public void setDescending(boolean descending) {
+        this.descending = descending;
     }
 }

@@ -3,6 +3,7 @@ package com.leyou.search.service;
 import com.leyou.common.pojo.PageResult;
 import com.leyou.search.pojo.Goods;
 import com.leyou.search.pojo.SearchRequest;
+import com.leyou.search.pojo.SearchResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class SearchServiceTest {
     public void queryByPage() {
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.setKey("手机");
-        PageResult<Goods> goodsPageResult = searchService.queryByPage(searchRequest);
+        SearchResult<Goods> goodsPageResult = searchService.queryByPage(searchRequest);
         System.out.println(goodsPageResult);
     }
 }

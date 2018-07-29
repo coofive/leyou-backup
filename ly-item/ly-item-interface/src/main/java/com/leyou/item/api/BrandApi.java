@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 /**
  * 商品品牌访问接口
  *
@@ -25,4 +27,13 @@ public interface BrandApi {
      */
     @GetMapping("brandId")
     Brand queryByBrandId(@RequestParam(value = "brandId", defaultValue = "0") Long brandId);
+
+    /**
+     * 通过brandIds查询品牌
+     *
+     * @param brandIds
+     * @return
+     */
+    @GetMapping("brandIds")
+    List<Brand> queryByBrandIds(@RequestParam(value = "brandIds")List<Long> brandIds);
 }
