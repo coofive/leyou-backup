@@ -19,13 +19,19 @@ import java.util.List;
 @RequestMapping("spec")
 public interface SpecApi {
     /**
-     * 通过规格组id查询规格参数
+     * 查询规格参数
      *
+     * @param group_id
      * @param cid
+     * @param generic
+     * @param searching
      * @return
      */
     @GetMapping("params")
-    List<SpecParam> querySpecParamCid(
-            @RequestParam(value = "cid", required = false) Long cid
+    List<SpecParam> querySpecParam(
+            @RequestParam(value = "gid", required = false) Long group_id,
+            @RequestParam(value = "cid", required = false) Long cid,
+            @RequestParam(value = "generic", required = false) Boolean generic,
+            @RequestParam(value = "searching", required = false) Boolean searching
     );
 }

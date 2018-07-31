@@ -1,5 +1,7 @@
 package com.leyou.search.pojo;
 
+import java.util.Map;
+
 /**
  * 搜索字段实体类
  *
@@ -37,6 +39,11 @@ public class SearchRequest {
      * 升序或降序
      */
     private boolean descending;
+
+    /**
+     * 过滤项
+     */
+    private Map<String, Object> filter;
 
     public String getKey() {
         return key;
@@ -76,5 +83,13 @@ public class SearchRequest {
 
     public void setDescending(boolean descending) {
         this.descending = descending;
+    }
+
+    public Map<String, Object> getFilter() {
+        return filter;
+    }
+
+    public void setFilter(Map<String, Object> filter) {
+        this.filter = filter;
     }
 }

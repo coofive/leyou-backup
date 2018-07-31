@@ -89,7 +89,7 @@ public class IndexServiceImpl implements IndexService {
             // 获取规格参数信息
             // 常规参数和特殊参数
             SpuDetail spuDetail = this.goodsClient.querySpuDetailBySpuId(spuId);
-            List<SpecParam> specParams = this.specClient.querySpecParamCid(spu.getCid3());
+            List<SpecParam> specParams = this.specClient.querySpecParam(null, spu.getCid3(), null, null);
 
             Map<String, Object> genericSpec = jacksonMapper.readValue(spuDetail.getGenericSpec(),
                     new TypeReference<Map<String, Object>>() {
@@ -110,8 +110,10 @@ public class IndexServiceImpl implements IndexService {
                             String value = chooseSegment(keyValue, param);
                             specs.put(keyName, value);
                         } else {
-                            specs.put(keyName, keyValue);
+                            specs.put(keyName, StringUtils.isBlank(keyValue) ? "其他" : keyValue);
                         }
+                    } else {
+                        specs.put(param.getName(), specialSpec.get(param.getId().toString()));
                     }
                 }
             });
@@ -203,7 +205,7 @@ public class IndexServiceImpl implements IndexService {
      */
     private String chooseSegment(String value, SpecParam param) {
         double val = NumberUtils.toDouble(value);
-        String result = "其它";
+        String result = "其他";
 
         // 保存数值段
         for (String segment : param.getSegments().split(",")) {

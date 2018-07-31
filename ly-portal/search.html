@@ -113,13 +113,9 @@
                 </ul>
                 <!--已选择过滤项-->
                 <ul class="tags-choose">
-                    <li class="tag">
-                        品牌:<span style="color: red">apple</span>
-                        <i class="sui-icon icon-tb-close"></i>
-                    </li>
-                    <li class="tag">
-                        内存:<span style="color: red">4G</span>
-                        <i class="sui-icon icon-tb-close"></i>
+                    <li class="tag" v-for="(v,k) in search.filter" :key="k" v-if=" k !== 'cid3'">
+                        {{k == 'brandId'? '品牌':k}} : <span style="color: red">{{getFilterValue(k,v)}}</span>
+                        <i class="sui-icon icon-tb-close" @click="removeFilter(k)"></i>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
@@ -127,11 +123,15 @@
             <!--selector-->
             <div class="clearfix selector">
                 <div class="type-wrap"
-                     v-for="(f,i) in filters" :key="i" v-if="f.k != 'brandId'">
+                     v-for="(f,i) in remainFilters"
+                     :key="i"
+                     v-if="f.k != 'brandId'"
+                     v-show="i < 5 || show">
                     <div class="fl key">{{f.k == 'cid3'? '分类':f.k}}</div>
                     <div class="fl value">
                         <ul class="type-list">
-                            <li v-for="(option,j) in f.options" :key="j">
+                            <li v-for="(option,j) in f.options" :key="j"
+                                @click="selectFilter(f.k,option.id||option.name)">
                                 <a href="javascript:;">{{option.name}}</a>
                             </li>
                         </ul>
@@ -142,7 +142,8 @@
                     <div class="fl key brand">{{f.k == 'brandId'? '品牌':f.k}}</div>
                     <div class="value logos">
                         <ul class="logo-list">
-                            <li v-for="(option,y) in f.options" :key="y" v-if="option.image">
+                            <li v-for="(option,y) in f.options" :key="y" v-if="option.image"
+                                @click="selectFilter(f.k,option.id)">
                                 <img :src="option.image"/>
                             </li>
                             <li style="text-align: center" v-else>
@@ -154,114 +155,12 @@
                         <a href="javascript:void(0);" class="sui-btn">多选</a>
                     </div>
                 </div>
-                <div class="type-wrap">
-                    <div class="fl key">网络制式</div>
-                    <div class="fl value">
-                        <ul class="type-list">
-                            <li>
-                                <a>GSM（移动/联通2G）</a>
-                            </li>
-                            <li>
-                                <a>电信2G</a>
-                            </li>
-                            <li>
-                                <a>电信3G</a>
-                            </li>
-                            <li>
-                                <a>移动3G</a>
-                            </li>
-                            <li>
-                                <a>联通3G</a>
-                            </li>
-                            <li>
-                                <a>联通4G</a>
-                            </li>
-                            <li>
-                                <a>电信3G</a>
-                            </li>
-                            <li>
-                                <a>移动3G</a>
-                            </li>
-                            <li>
-                                <a>联通3G</a>
-                            </li>
-                            <li>
-                                <a>联通4G</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="fl ext"></div>
-                </div>
-                <div class="type-wrap">
-                    <div class="fl key">显示屏尺寸</div>
-                    <div class="fl value">
-                        <ul class="type-list">
-                            <li>
-                                <a>4.0-4.9英寸</a>
-                            </li>
-                            <li>
-                                <a>4.0-4.9英寸</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="fl ext"></div>
-                </div>
-                <div class="type-wrap">
-                    <div class="fl key">摄像头像素</div>
-                    <div class="fl value">
-                        <ul class="type-list">
-                            <li>
-                                <a>1200万以上</a>
-                            </li>
-                            <li>
-                                <a>800-1199万</a>
-                            </li>
-                            <li>
-                                <a>1200-1599万</a>
-                            </li>
-                            <li>
-                                <a>1600万以上</a>
-                            </li>
-                            <li>
-                                <a>无摄像头</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="fl ext"></div>
-                </div>
-                <div class="type-wrap">
-                    <div class="fl key">价格</div>
-                    <div class="fl value">
-                        <ul class="type-list">
-                            <li>
-                                <a>0-500元</a>
-                            </li>
-                            <li>
-                                <a>500-1000元</a>
-                            </li>
-                            <li>
-                                <a>1000-1500元</a>
-                            </li>
-                            <li>
-                                <a>1500-2000元</a>
-                            </li>
-                            <li>
-                                <a>2000-3000元 </a>
-                            </li>
-                            <li>
-                                <a>3000元以上</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="fl ext">
-                    </div>
-                </div>
                 <div class="type-wrap" style="text-align: center">
-                    <v-btn small flat>
+                    <v-btn small flat @click="show=true" v-show="!show">
                         更多
                         <v-icon>arrow_drop_down</v-icon>
                     </v-btn>
-                    <v-btn small="" flat>
+                    <v-btn small="" flat @click="show=false" v-show="show">
                         收起
                         <v-icon>arrow_drop_up</v-icon>
                     </v-btn>
@@ -464,12 +363,14 @@
             search: {
                 key: "",    // 搜索页面的关键字
                 page: 1,
+                filter: {}, // 发送到后台的过滤项
             },
             goodsList: [],
             total: 0,   // 总条数
             totalPage: 0,   // 总页数
             targetPage: 1,  // 要点击的目标页
             filters: [], // 过滤参数集合
+            show: false, // 是否展开更多过滤条件
         },
         created() {
             // 判断是否有请求参数, location.search 返回当前url?(包括?)后面的字符串
@@ -486,6 +387,9 @@
             // 对排序进行初始化,转为布尔值
             search.descending = search.descending === 'true' || false;
 
+            // 对过滤项进行初始化
+            search.filter = search.filter || {};
+
             // 记录在data的search对象中
             this.search = search;
             // 发起请求，根据条件搜索
@@ -499,7 +403,7 @@
                         // 如果旧的search值为空，或者search中的key为空，证明是第一次
                         return;
                     }
-                    window.location.href = "http://www.leyou.com/search.html?" + ly.stringify(val);
+                    window.location.href = "http://www.leyou.com/search.html?" + ly.stringify(this.search, {allowDots: false});
                 }
             }
         },
@@ -533,6 +437,11 @@
                             options: data.brands
                         });
 
+                        data.specs.forEach(spec => {
+                            spec.options = spec.options.map(o => ({name: o}));
+                            this.filters.push(spec);
+                        });
+
                     }).catch(() => {
                     console.log("请求失败")
                 })
@@ -557,7 +466,43 @@
                     this.search.page++;
                 }
             },
+            // 选择过滤项
+            selectFilter(k, name) {
+                // 直接修改search会导致页面直接加载，所以复制一份
+                const obj = {};
+                Object.assign(obj, this.search);
 
+                // 添加新的属性
+                obj.filter[k] = name;
+
+                // 赋值给search
+                this.search = obj;
+            },
+            // 显示过滤项的值
+            getFilterValue(k, v) {
+                // 如果没有过滤参数,跳过展示
+                if (!this.filters || this.search.filter.length === 0) {
+                    return null;
+                }
+                // 判断是否是品牌
+                if (k === 'brandId') {
+                    // 返回品牌名称
+                    return this.filters.find(f => f.k === 'brandId').options[0].name;
+                }
+                return v;
+            },
+            // 移除过滤项
+            removeFilter(k) {
+                this.search.filter[k] = null;
+            }
+        },
+        computed: {
+            remainFilters() {
+                // 先取到过滤条件的所有keys
+                const keys = Object.keys(this.search.filter);
+                // 再比对filters中的k与之是否相等
+                return this.filters.filter(f => !keys.includes(f.k) && f.options.length > 1 || f.k === 'cid3');
+            }
         },
 
 

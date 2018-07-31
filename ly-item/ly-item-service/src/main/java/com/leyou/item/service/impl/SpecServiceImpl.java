@@ -35,10 +35,13 @@ public class SpecServiceImpl implements SpecService {
     }
 
     @Override
-    public List<SpecParam> querySpecParamByGid(Long group_id, Long cid) {
+    public List<SpecParam> querySpecParam(Long group_id, Long cid, Boolean generic, Boolean searching) {
         SpecParam specParam = new SpecParam();
         specParam.setGroupId(group_id);
         specParam.setCid(cid);
+        specParam.setGeneric(generic);
+        specParam.setSearching(searching);
         return specParamMapper.select(specParam);
     }
+
 }

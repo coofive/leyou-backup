@@ -23,11 +23,14 @@ public interface SpecService {
     List<SpecGroup> querySpecGroupByCid(Long cid);
 
     /**
-     * 通过规格组id查询规格参数
+     * 查询规格参数
      *
      * @param group_id
      * @param cid
+     * @param generic
+     * @param searching
      * @return
      */
-    List<SpecParam> querySpecParamByGid(Long group_id, Long cid);
+    List<SpecParam> querySpecParam(Long group_id, Long cid, Boolean generic, Boolean searching);
+
 }

@@ -42,22 +42,27 @@ public class SpecController {
     }
 
     /**
-     * 通过规格组id查询规格参数
+     * 查询规格参数
      *
      * @param group_id
      * @param cid
+     * @param generic
+     * @param searching
      * @return
      */
     @GetMapping("params")
-    public ResponseEntity<List<SpecParam>> querySpecParamByGid(
+    public ResponseEntity<List<SpecParam>> querySpecParam(
             @RequestParam(value = "gid", required = false) Long group_id,
-            @RequestParam(value = "cid", required = false) Long cid
+            @RequestParam(value = "cid", required = false) Long cid,
+            @RequestParam(value = "generic", required = false) Boolean generic,
+            @RequestParam(value = "searching", required = false) Boolean searching
     ) {
-        List<SpecParam> params = specService.querySpecParamByGid(group_id, cid);
+        List<SpecParam> params = specService.querySpecParam(group_id, cid, generic, searching);
 
         if (params == null || params.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(params);
     }
+
 }
