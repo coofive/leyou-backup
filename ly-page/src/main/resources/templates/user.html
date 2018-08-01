@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2 th:object="${user}">
+        <p>Name：<span th:text="*{name.split(' ')[0]}">Jack</span></p>
+        <p>Friend.name：<span th:text="*{friend.name.split(' ')[1]}">Jack</span></p>
+    </h2>
+    <h1 th:text="${#dates.format(today,'yyyy-MM-dd')}"></h1>
+
+    <span th:text="'欢迎您'+${user.name}"></span>
+
+    <table>
+        <tr th:each="user : ${users}" th:object="${user}">
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.age}"></td>
+        </tr>
+    </table>
+
+    <div th:switch="${user.name}">
+        <p th:case="'小李 陈'">经理</p>
+        <p th:case="'小李'">经理2</p>
+    </div>
+</body>
+
+
+</html>

@@ -30,4 +30,12 @@ public interface CategoryService {
      * @return
      */
     List<Category> queryByCids(List<Long> ids);
+
+    /**
+     * 根据cid查询所有父商品类目
+     *
+     * @param cid
+     * @return
+     */
+    List<Category> queryAllLevelByCid(Long cid);
 }

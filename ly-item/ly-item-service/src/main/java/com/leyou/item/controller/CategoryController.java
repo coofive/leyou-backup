@@ -59,5 +59,20 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
+    /**
+     * 根据cid查询所有父商品类目
+     *
+     * @param cid
+     * @return
+     */
+    @GetMapping("/all/level")
+    public ResponseEntity<List<Category>> queryAllLevelByCid(@RequestParam(value = "cid") Long cid) {
+        List<Category> categories = categoryService.queryAllLevelByCid(cid);
+        if (categories == null || categories.size() < 1) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(categories);
+    }
+
 
 }

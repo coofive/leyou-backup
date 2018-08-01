@@ -108,8 +108,10 @@
                 <!--面包屑-->
                 <ul class="fl sui-breadcrumb">
                     <li><span>全部结果:</span></li>
-                    <li><a href="#">手机</a></li>
-                    <li><span>手机通讯</span></li>
+                    <li v-for="(b,i) in breads" :key="i">
+                        <a href="#" v-if="i < 2">{{b.name}}</a>
+                        <span v-else>{{b.name}}</span>
+                    </li>
                 </ul>
                 <!--已选择过滤项-->
                 <ul class="tags-choose">
@@ -206,7 +208,7 @@
                         <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                             <div class="list-wrap">
                                 <div class="p-img">
-                                    <a href="item.html" target="_blank">
+                                    <a :href="'item/'+ goods.id + '.html'" target="_blank">
                                         <img :src="goods.selectedSku.image" height="200"/>
                                     </a>
                                     <ul class="skus">
@@ -371,6 +373,7 @@
             targetPage: 1,  // 要点击的目标页
             filters: [], // 过滤参数集合
             show: false, // 是否展开更多过滤条件
+            breads: [] // 面包屑展示内容
         },
         created() {
             // 判断是否有请求参数, location.search 返回当前url?(包括?)后面的字符串
@@ -426,6 +429,14 @@
                         this.goodsList = data.items;
                         this.total = data.total;
                         this.totalPage = data.totalPage;
+
+                        // 获取面包屑数据
+                        if (data.categories.length == 1) {
+                            ly.http.get("/item/category/all/level?cid=" + data.categories[0].id)
+                                .then(resp => {
+                                    this.breads = resp.data;
+                                })
+                        }
 
                         // 初始化过滤项
                         this.filters.push({

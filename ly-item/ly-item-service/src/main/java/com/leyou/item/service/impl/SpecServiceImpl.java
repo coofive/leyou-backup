@@ -31,7 +31,15 @@ public class SpecServiceImpl implements SpecService {
     public List<SpecGroup> querySpecGroupByCid(Long cid) {
         SpecGroup specGroup = new SpecGroup();
         specGroup.setCid(cid);
-        return specGroupMapper.select(specGroup);
+        List<SpecGroup> groups = this.specGroupMapper.select(specGroup);
+        groups.forEach(group -> {
+            SpecParam specParam = new SpecParam();
+            specParam.setGroupId(group.getId());
+            List<SpecParam> params = this.specParamMapper.select(specParam);
+            group.setParams(params);
+        });
+
+        return groups;
     }
 
     @Override
