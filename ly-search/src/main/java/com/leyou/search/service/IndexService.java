@@ -25,4 +25,11 @@ public interface IndexService {
      * @return
      */
     Goods buildGoods(Spu spu);
+
+    /**
+     * 添加或更新索引
+     *
+     * @param spuId
+     */
+    void addIndex(Long spuId);
 }

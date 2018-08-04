@@ -1,5 +1,6 @@
 package com.leyou.page.controller;
 
+import com.leyou.page.service.FileService;
 import com.leyou.page.service.PageGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class PageGoodsController {
     @Autowired
     private PageGoodsService pageGoodsService;
 
+    @Autowired
+    private FileService fileService;
+
     /**
      * 商品详情页面查询
      *
@@ -38,6 +42,10 @@ public class PageGoodsController {
         // service封装数据
         Map<String, Object> map = this.pageGoodsService.addGoodsToMap(spuId);
         model.addAllAttributes(map);
+        // 判断是否需要生成新的静态页面
+        if(!this.fileService.existsHtml(spuId)){
+            this.fileService.syncCreateHtml(spuId);
+        }
         return "item";
     }
 }

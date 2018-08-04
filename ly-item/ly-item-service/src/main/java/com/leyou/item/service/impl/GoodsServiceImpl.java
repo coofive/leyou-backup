@@ -10,6 +10,8 @@ import com.leyou.item.service.GoodsService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +52,9 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     private BrandMapper brandMapper;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     /**
      * 商品分页查询
@@ -125,6 +130,9 @@ public class GoodsServiceImpl implements GoodsService {
         // 需要设置skus里面的spuId
         saveSkusAndStocks(spu);
 
+
+        // 发送队列消息
+        this.sendMessage(spu.getId(), "insert");
         return true;
     }
 
@@ -197,6 +205,7 @@ public class GoodsServiceImpl implements GoodsService {
         // 再添加skus数据以及stock数据
         saveSkusAndStocks(spu);
 
+        this.sendMessage(spu.getId(), "update");
         return true;
     }
 
@@ -255,5 +264,16 @@ public class GoodsServiceImpl implements GoodsService {
             }
 
         });
+    }
+
+    private void sendMessage(Long id, String type) {
+        // 发送消息，不能让消息的发送影响到正常的业务逻辑
+        try {
+            this.amqpTemplate.convertAndSend("item." + type, id);
+        } catch (Exception e) {
+            logger.error("{}商品消息发送异常，商品id：{}", type, id, e);
+
+        }
+
     }
 }

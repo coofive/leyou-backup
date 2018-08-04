@@ -149,6 +149,18 @@ public class IndexServiceImpl implements IndexService {
 
     }
 
+    /**
+     * 添加或更新某项索引
+     *
+     * @param spuId
+     */
+    @Override
+    public void addIndex(Long spuId) {
+        Spu spu = this.goodsClient.querySpuBySpuId(spuId);
+        Goods goods = this.buildGoods(spu);
+        this.repository.save(goods);
+    }
+
 
     /**
      * 获取标题，分类，品牌拼接字符串

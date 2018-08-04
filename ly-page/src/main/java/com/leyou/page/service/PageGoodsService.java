@@ -18,4 +18,6 @@ public interface PageGoodsService {
      * @return
      */
     Map<String, Object> addGoodsToMap(Long spuId);
+
+
 }

@@ -6,6 +6,11 @@ spring:
     name: page-service
   thymeleaf:
     cache: false
+  rabbitmq:
+    host: 192.168.56.104
+    username: leyou
+    password: leyou
+    virtual-host: /leyou
 eureka:
   client:
     service-url:
@@ -16,3 +21,6 @@ eureka:
     prefer-ip-address: true
     ip-address: 127.0.0.1
     instance-id: ${spring.application.name}.${server.port}
+ly:
+  thymeleaf:
+    destPath: C:/Users/Administrator/Desktop/Portable/nginx-1.15.1/html/item
