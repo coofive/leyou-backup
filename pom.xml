@@ -111,5 +111,7 @@
         <module>ly-upload</module>
         <module>ly-search</module>
         <module>ly-page</module>
+        <module>ly-user</module>
+        <module>ly-sms-service</module>
     </modules>
 </project>
