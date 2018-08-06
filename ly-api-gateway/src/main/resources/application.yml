@@ -29,6 +29,12 @@ zuul:
       path: /user/**
       serviceId: user-service
       strip-prefix: false
+    auth-service:
+      path: /auth/**
+      serviceId: auth-service
+      strip-prefix: false
+  sensitive-headers: #忽略敏感头信息
+  add-host-header: true #携带请求本身的host头信息
 ribbon:
   ConnectTimeout: 250 # 连接超时时间(ms)
   ReadTimeout: 2000 # 通信超时时间(ms)
@@ -42,3 +48,15 @@ hystrix:
         isolation:
           thread:
             timeoutInMillisecond: 10000 # 熔断超时时长：10000ms
+ly:
+  jwt:
+    pubKeyPath: C:/test/rsa/rsa.pub
+    cookieName: LY_TOKEN
+  filter:
+    allowPaths:
+      - /api/auth
+      - /api/search
+      - /api/user/register
+      - /api/user/check
+      - /api/user/code
+      - /api/item

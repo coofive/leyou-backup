@@ -9,19 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.leyou.common</groupId>
-    <artifactId>ly-common</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-    </dependencies>
+    <groupId>com.leyou.service</groupId>
+    <artifactId>ly-auth</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>ly-auth-common</module>
+        <module>ly-auth-service</module>
+    </modules>
 
 
 </project>

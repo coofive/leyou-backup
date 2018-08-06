@@ -166,10 +166,7 @@
                     return new Promise(resolve => {
                         leyou.http.get("/user/check/" + value + "/" + args[0])
                             .then(resp => {
-                                resolve({
-                                    valid: resp.data,
-                                    data: "已存在!"
-                                })
+
 
                             }).catch(error => {
                             if (error.response.status == 400) {

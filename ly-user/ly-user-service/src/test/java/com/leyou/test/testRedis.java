@@ -1,5 +1,6 @@
 package com.leyou.test;
 
+import com.leyou.user.utils.CodecUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -58,6 +59,12 @@ public class testRedis {
         }
 
         // 获取所有数据
+    }
+
+    @Test
+    public void testUtils() {
+        String s = CodecUtils.md5Hex(null, "");
+        System.out.println("s = " + s);
     }
 
 }

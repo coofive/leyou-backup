@@ -10,7 +10,7 @@ spring:
       cluster-name: leyou
       cluster-nodes: 192.168.56.102:9300,192.168.56.104:9300
   rabbitmq:
-    host: 192.168.56.104
+    host: 127.0.0.1
     username: leyou
     password: leyou
     virtual-host: /leyou

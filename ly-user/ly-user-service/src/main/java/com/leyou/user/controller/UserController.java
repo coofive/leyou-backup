@@ -2,6 +2,7 @@ package com.leyou.user.controller;
 
 import com.leyou.user.pojo.User;
 import com.leyou.user.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,6 +104,10 @@ public class UserController {
             @RequestParam("password") String password) {
 
         try {
+
+            if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
 
             User user = this.userService.queryUser(username, password);
             if (user == null) {
