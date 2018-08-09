@@ -33,6 +33,10 @@ zuul:
       path: /auth/**
       serviceId: auth-service
       strip-prefix: false
+    cart-service:
+      path: /cart/**
+      serviceId: cart-service
+      strip-prefix: false
   sensitive-headers: #忽略敏感头信息
   add-host-header: true #携带请求本身的host头信息
 ribbon:

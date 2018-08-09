@@ -210,17 +210,17 @@
                             <div class="fl title">
                                 <div class="control-group">
                                     <div class="controls">
-                                        <input autocomplete="off" type="text" disabled value="1" minnum="1"
+                                        <input autocomplete="off" type="text" disabled v-model="num" minnum="1"
                                                class="itxt"/>
-                                        <a href="javascript:void(0)" class="increment plus">+</a>
-                                        <a href="javascript:void(0)" class="increment mins">-</a>
+                                        <a href="javascript:void(0)" class="increment plus" @click="increment">+</a>
+                                        <a href="javascript:void(0)" class="increment mins" @click="decrement">-</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="fl">
                                 <ul class="btn-choose unstyled">
                                     <li>
-                                        <a href="success-cart.html" target="_blank"
+                                        <a href="#" @click.prevent="addCart" target="_blank"
                                            class="sui-btn  btn-danger addshopcar">加入购物车</a>
                                     </li>
                                 </ul>
@@ -463,7 +463,8 @@
                                 </div>
                                 <div class="package-list">
                                     <h3>包装清单</h3>
-                                    <p th:text="${spuDetail.packingList}">手机X1、快速指南X1、华为SuperCharge 充电器X1、三包凭证X1、Type-C 数字耳机X1、Type-C
+                                    <p th:text="${spuDetail.packingList}">手机X1、快速指南X1、华为SuperCharge 充电器X1、三包凭证X1、Type-C
+                                        数字耳机X1、Type-C
                                         数据线X1、取卡针X1、TPU保护壳X1、USB Type-C转3.5mm耳机转接线X1（备注：最终以实物为准）</p>
                                 </div>
 
@@ -635,11 +636,13 @@
         el: "#itemApp",
         data: {
             ly,
+            spuDetail,
             specialSpec, // 商品特殊参数
             genericSpec, // 商品通用规格参数
             params, // 存储特殊参数id的name
             indexes,
             skus,
+            num: 1, // 购买数量
         },
         computed: {
             sku() {
@@ -664,6 +667,68 @@
                     })
                 })
                 return groups;
+            },
+            ownSpec() {
+                const ownSpec = JSON.parse(this.sku.ownSpec);
+                const result = {};
+                Object.keys(ownSpec).forEach(k => result[params[k]] = ownSpec[k]);
+                return result;
+            }
+        },
+        methods: {
+            addCart() {
+                ly.http.get("/auth/verify").then((resp) => {
+                    // 登录情况下加入购物车
+                    ly.http.post("/cart", {
+                        skuId: this.sku.id,
+                        title: this.sku.title,
+                        image: this.images[0] || '',
+                        price: this.sku.price,
+                        num: this.num,
+                        ownSpec: JSON.stringify(this.ownSpec)
+                    }).then((resp) => {
+                        location.href = "http://www.leyou.com/success-cart.html?id=" + this.spuDetail.spuId;
+                    })
+
+                }).catch(() => {
+                    // 未登录情况下加入购物车
+                    // 先从localStorage取看是否能取到
+                    const carts = ly.store.get("carts") || [];
+                    let cart = carts.find(c => c.skuId == this.sku.id);
+                    // 有则添加数量
+                    if (cart) {
+                        cart.num += this.num;
+                    } else {
+                        // 不存在，新增
+                        cart = {
+                            skuId: this.sku.id,
+                            title: this.sku.title,
+                            image: this.images[0] || '',
+                            price: this.sku.price,
+                            num: this.num,
+                            ownSpec: JSON.stringify(this.ownSpec)
+                        }
+                        carts.push(cart);
+                    }
+
+
+                    // 写人
+                    ly.store.set("carts", carts);
+
+                    // 跳转加入成功购物车
+                    location.href = "http://www.leyou.com/success-cart.html?id=" + this.spuDetail.spuId;
+
+                })
+
+
+            },
+            increment() {
+                this.num++;
+            },
+            decrement() {
+                if (this.num > 1) {
+                    this.num--;
+                }
             }
         },
         components: {
